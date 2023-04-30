@@ -1,0 +1,53 @@
+<div style="width: 285px; margin: 0 auto; margin-top:50px">
+    <input type="text" id="codeInput" style="width: 180px; padding: 5px;" maxlength="4" />
+    <button id="btnRecuperer" style="width: 100px; padding: 5px;">Récupérer</button>
+    <div id="divInfo"
+        style="width: 285px; height: 50px; margin-top: 10px; text-align: center; line-height: 20px; font-weight: bold; color: black; padding:4px">
+        Indiquez votre code<br />pour récupérer votre commentaire</div>
+</div>
+
+<script>
+    function erreurDiv(msg) {
+        divInfo.innerHTML = msg;
+        divInfo.style.backgroundColor = "red";
+        divInfo.style.color = "white";
+    }
+    function okDiv(msg) {
+        divInfo.innerHTML = msg;
+        divInfo.style.backgroundColor = "white";
+        divInfo.style.color = "black";
+    }
+
+    var btnRecuperer = document.getElementById("btnRecuperer");
+    btnRecuperer.addEventListener("click", function () {
+        var codeInput = document.getElementById("codeInput").value.toLowerCase();
+        var divInfo = document.getElementById("divInfo");
+
+        if (codeInput.length !== 4 || !/^[abcdefghijkmnpqrstuvwxyz23456789]+$/.test(codeInput)) {
+            erreurDiv("Erreur : veuillez vérifier<br />que votre code est correct");
+            return;
+        }
+
+        okDiv("Vérification du fichier...");
+
+        var nomFichier = "mp3/" + codeInput.charAt(0) + "/" + codeInput.substring(1) + ".mp3";
+        var xhr = new XMLHttpRequest();
+        xhr.open('HEAD', nomFichier, true);
+        xhr.onload = function (e) {
+            if (this.status === 200) {
+                okDiv("Redirection vers le fichier...");
+                window.location.href = nomFichier;
+            } else {
+                erreurDiv("Erreur : le fichier<br />n'a pas été trouvé");
+            }
+        };
+        xhr.onerror = function () {
+            erreurDiv("Erreur : le fichier<br />n'a pas été trouvé");
+        };
+        xhr.send();
+    });
+
+    window.onbeforeunload = function () {
+        okDiv("Indiquez votre code<br />pour récupérer votre commentaire")
+    };
+</script>
