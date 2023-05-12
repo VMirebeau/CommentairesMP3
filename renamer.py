@@ -32,7 +32,7 @@ for mp3_file in mp3_files:
     # Génère un alias unique pour ce fichier
     alias = None
     while not alias or alias in used_aliases:
-        alias = ''.join(random.choice('abcdefghijkmnpqrstuvwxyz23456789') for _ in range(3))
+        alias = ''.join(random.choice('ABCDEFGHIJKMNPRTUVWXYZ2346789') for _ in range(3))
     used_aliases[alias] = mp3_file
     
     # Stocke les informations sur le fichier dans la liste files_info
@@ -40,7 +40,7 @@ for mp3_file in mp3_files:
     
     # Renomme le fichier avec son alias
     old_path = os.path.join(folder_path, mp3_file)
-    new_path = os.path.join(folder_path, f"{alias}.mp3")
+    new_path = os.path.join(folder_path, f"{alias.lower()}.mp3")
     os.rename(old_path, new_path)
 
 # Exporte les informations sur les fichiers dans un fichier CSV
